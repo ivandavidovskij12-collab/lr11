@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страны мира - Каталог стран</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #1a2980, #26d0ce);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 i {
+            color: #FFD700;
+            margin-right: 15px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 25px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .stat-item i {
+            font-size: 1.5rem;
+            color: #FFD700;
+        }
+        
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        thead {
+            background: linear-gradient(90deg, #4b6cb7, #182848);
+            color: white;
+        }
+        
+        th {
+            padding: 20px 15px;
+            text-align: left;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        th i {
+            margin-right: 10px;
+        }
+        
+        th:first-child {
+            border-top-left-radius: 10px;
+        }
+        
+        th:last-child {
+            border-top-right-radius: 10px;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tbody tr:hover {
+            background-color: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        td {
+            padding: 18px 15px;
+            font-size: 1rem;
+        }
+        
+        .country-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.05rem;
+        }
+        
+        .capital-name {
+            color: #3498db;
+            font-weight: 500;
+        }
+        
+        .population {
+            color: #27ae60;
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .area {
+            color: #e74c3c;
+            font-weight: 500;
+            text-align: right;
+        }
+        
+        .number {
+            color: #7f8c8d;
+            font-weight: bold;
+            text-align: center;
+            width: 60px;
+        }
+        
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(90deg, #ff7e5f, #feb47b);
+            color: white;
+            text-decoration: none;
+            padding: 16px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        .source-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(90deg, #ff9966, #ff5e62);
+        }
+        
+        .timestamp {
+            color: #bdc3c7;
+            font-size: 0.95rem;
+            margin-top: 15px;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            th, td {
+                padding: 12px 8px;
+                font-size: 0.9rem;
+            }
+            
+            .table-container {
+                padding: 15px;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+        
+        /* Анимация */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        tbody tr {
+            animation: fadeIn 0.5s ease forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-globe-americas"></i>Страны мира</h1>
+            <p>Полный каталог стран с информацией о столицах, населении и площади</p>
+            
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <i class="fas fa-flag"></i>
+                    <span>Стран: <strong>250</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-users"></i>
+                    <span>Население: <strong>6,861,418,895</strong></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>В среднем: <strong>27,445,675</strong> чел./страна</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i>№</th>
+                        <th><i class="fas fa-flag"></i>Страна</th>
+                        <th><i class="fas fa-landmark"></i>Столица</th>
+                        <th><i class="fas fa-users"></i>Население</th>
+                        <th><i class="fas fa-mountain"></i>Площадь (км²)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="animation-delay: 0.02s">
+                        <td class="number">1</td>
+                        <td class="country-name">Andorra</td>
+                        <td class="capital-name">Andorra la Vella</td>
+                        <td class="population">84,000</td>
+                        <td class="area">468.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.04s">
+                        <td class="number">2</td>
+                        <td class="country-name">United Arab Emirates</td>
+                        <td class="capital-name">Abu Dhabi</td>
+                        <td class="population">4,975,593</td>
+                        <td class="area">82,880.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.06s">
+                        <td class="number">3</td>
+                        <td class="country-name">Afghanistan</td>
+                        <td class="capital-name">Kabul</td>
+                        <td class="population">29,121,286</td>
+                        <td class="area">647,500.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.08s">
+                        <td class="number">4</td>
+                        <td class="country-name">Antigua and Barbuda</td>
+                        <td class="capital-name">St. John's</td>
+                        <td class="population">86,754</td>
+                        <td class="area">443.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.1s">
+                        <td class="number">5</td>
+                        <td class="country-name">Anguilla</td>
+                        <td class="capital-name">The Valley</td>
+                        <td class="population">13,254</td>
+                        <td class="area">102.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.12s">
+                        <td class="number">6</td>
+                        <td class="country-name">Albania</td>
+                        <td class="capital-name">Tirana</td>
+                        <td class="population">2,986,952</td>
+                        <td class="area">28,748.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.14s">
+                        <td class="number">7</td>
+                        <td class="country-name">Armenia</td>
+                        <td class="capital-name">Yerevan</td>
+                        <td class="population">2,968,000</td>
+                        <td class="area">29,800.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.16s">
+                        <td class="number">8</td>
+                        <td class="country-name">Angola</td>
+                        <td class="capital-name">Luanda</td>
+                        <td class="population">13,068,161</td>
+                        <td class="area">1,246,700.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.18s">
+                        <td class="number">9</td>
+                        <td class="country-name">Antarctica</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">-</td>
+                        <td class="area">-</td>
+                    </tr>
+                    <tr style="animation-delay: 0.2s">
+                        <td class="number">10</td>
+                        <td class="country-name">Argentina</td>
+                        <td class="capital-name">Buenos Aires</td>
+                        <td class="population">41,343,201</td>
+                        <td class="area">2,766,890.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.22s">
+                        <td class="number">11</td>
+                        <td class="country-name">American Samoa</td>
+                        <td class="capital-name">Pago Pago</td>
+                        <td class="population">57,881</td>
+                        <td class="area">199.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.24s">
+                        <td class="number">12</td>
+                        <td class="country-name">Austria</td>
+                        <td class="capital-name">Vienna</td>
+                        <td class="population">8,205,000</td>
+                        <td class="area">83,858.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.26s">
+                        <td class="number">13</td>
+                        <td class="country-name">Australia</td>
+                        <td class="capital-name">Canberra</td>
+                        <td class="population">21,515,754</td>
+                        <td class="area">7,686,850.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.28s">
+                        <td class="number">14</td>
+                        <td class="country-name">Aruba</td>
+                        <td class="capital-name">Oranjestad</td>
+                        <td class="population">71,566</td>
+                        <td class="area">193.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.3s">
+                        <td class="number">15</td>
+                        <td class="country-name">Åland</td>
+                        <td class="capital-name">Mariehamn</td>
+                        <td class="population">26,711</td>
+                        <td class="area">1,580.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.32s">
+                        <td class="number">16</td>
+                        <td class="country-name">Azerbaijan</td>
+                        <td class="capital-name">Baku</td>
+                        <td class="population">8,303,512</td>
+                        <td class="area">86,600.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.34s">
+                        <td class="number">17</td>
+                        <td class="country-name">Bosnia and Herzegovina</td>
+                        <td class="capital-name">Sarajevo</td>
+                        <td class="population">4,590,000</td>
+                        <td class="area">51,129.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.36s">
+                        <td class="number">18</td>
+                        <td class="country-name">Barbados</td>
+                        <td class="capital-name">Bridgetown</td>
+                        <td class="population">285,653</td>
+                        <td class="area">431.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.38s">
+                        <td class="number">19</td>
+                        <td class="country-name">Bangladesh</td>
+                        <td class="capital-name">Dhaka</td>
+                        <td class="population">156,118,464</td>
+                        <td class="area">144,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.4s">
+                        <td class="number">20</td>
+                        <td class="country-name">Belgium</td>
+                        <td class="capital-name">Brussels</td>
+                        <td class="population">10,403,000</td>
+                        <td class="area">30,510.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.42s">
+                        <td class="number">21</td>
+                        <td class="country-name">Burkina Faso</td>
+                        <td class="capital-name">Ouagadougou</td>
+                        <td class="population">16,241,811</td>
+                        <td class="area">274,200.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.44s">
+                        <td class="number">22</td>
+                        <td class="country-name">Bulgaria</td>
+                        <td class="capital-name">Sofia</td>
+                        <td class="population">7,148,785</td>
+                        <td class="area">110,910.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.46s">
+                        <td class="number">23</td>
+                        <td class="country-name">Bahrain</td>
+                        <td class="capital-name">Manama</td>
+                        <td class="population">738,004</td>
+                        <td class="area">665.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.48s">
+                        <td class="number">24</td>
+                        <td class="country-name">Burundi</td>
+                        <td class="capital-name">Bujumbura</td>
+                        <td class="population">9,863,117</td>
+                        <td class="area">27,830.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.5s">
+                        <td class="number">25</td>
+                        <td class="country-name">Benin</td>
+                        <td class="capital-name">Porto-Novo</td>
+                        <td class="population">9,056,010</td>
+                        <td class="area">112,620.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.52s">
+                        <td class="number">26</td>
+                        <td class="country-name">Saint Barthélemy</td>
+                        <td class="capital-name">Gustavia</td>
+                        <td class="population">8,450</td>
+                        <td class="area">21.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.54s">
+                        <td class="number">27</td>
+                        <td class="country-name">Bermuda</td>
+                        <td class="capital-name">Hamilton</td>
+                        <td class="population">65,365</td>
+                        <td class="area">53.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.56s">
+                        <td class="number">28</td>
+                        <td class="country-name">Brunei</td>
+                        <td class="capital-name">Bandar Seri Begawan</td>
+                        <td class="population">395,027</td>
+                        <td class="area">5,770.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.58s">
+                        <td class="number">29</td>
+                        <td class="country-name">Bolivia</td>
+                        <td class="capital-name">Sucre</td>
+                        <td class="population">9,947,418</td>
+                        <td class="area">1,098,580.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.6s">
+                        <td class="number">30</td>
+                        <td class="country-name">Bonaire</td>
+                        <td class="capital-name">Kralendijk</td>
+                        <td class="population">18,012</td>
+                        <td class="area">328.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.62s">
+                        <td class="number">31</td>
+                        <td class="country-name">Brazil</td>
+                        <td class="capital-name">Brasília</td>
+                        <td class="population">201,103,330</td>
+                        <td class="area">8,511,965.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.64s">
+                        <td class="number">32</td>
+                        <td class="country-name">Bahamas</td>
+                        <td class="capital-name">Nassau</td>
+                        <td class="population">301,790</td>
+                        <td class="area">13,940.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.66s">
+                        <td class="number">33</td>
+                        <td class="country-name">Bhutan</td>
+                        <td class="capital-name">Thimphu</td>
+                        <td class="population">699,847</td>
+                        <td class="area">47,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.68s">
+                        <td class="number">34</td>
+                        <td class="country-name">Bouvet Island</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">-</td>
+                        <td class="area">49.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.7000000000000001s">
+                        <td class="number">35</td>
+                        <td class="country-name">Botswana</td>
+                        <td class="capital-name">Gaborone</td>
+                        <td class="population">2,029,307</td>
+                        <td class="area">600,370.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.72s">
+                        <td class="number">36</td>
+                        <td class="country-name">Belarus</td>
+                        <td class="capital-name">Minsk</td>
+                        <td class="population">9,685,000</td>
+                        <td class="area">207,600.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.74s">
+                        <td class="number">37</td>
+                        <td class="country-name">Belize</td>
+                        <td class="capital-name">Belmopan</td>
+                        <td class="population">314,522</td>
+                        <td class="area">22,966.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.76s">
+                        <td class="number">38</td>
+                        <td class="country-name">Canada</td>
+                        <td class="capital-name">Ottawa</td>
+                        <td class="population">33,679,000</td>
+                        <td class="area">9,984,670.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.78s">
+                        <td class="number">39</td>
+                        <td class="country-name">Cocos [Keeling] Islands</td>
+                        <td class="capital-name">West Island</td>
+                        <td class="population">628</td>
+                        <td class="area">14.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.8s">
+                        <td class="number">40</td>
+                        <td class="country-name">Democratic Republic of the Congo</td>
+                        <td class="capital-name">Kinshasa</td>
+                        <td class="population">70,916,439</td>
+                        <td class="area">2,345,410.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.8200000000000001s">
+                        <td class="number">41</td>
+                        <td class="country-name">Central African Republic</td>
+                        <td class="capital-name">Bangui</td>
+                        <td class="population">4,844,927</td>
+                        <td class="area">622,984.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.84s">
+                        <td class="number">42</td>
+                        <td class="country-name">Republic of the Congo</td>
+                        <td class="capital-name">Brazzaville</td>
+                        <td class="population">3,039,126</td>
+                        <td class="area">342,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.86s">
+                        <td class="number">43</td>
+                        <td class="country-name">Switzerland</td>
+                        <td class="capital-name">Bern</td>
+                        <td class="population">7,581,000</td>
+                        <td class="area">41,290.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.88s">
+                        <td class="number">44</td>
+                        <td class="country-name">Ivory Coast</td>
+                        <td class="capital-name">Yamoussoukro</td>
+                        <td class="population">21,058,798</td>
+                        <td class="area">322,460.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.9s">
+                        <td class="number">45</td>
+                        <td class="country-name">Cook Islands</td>
+                        <td class="capital-name">Avarua</td>
+                        <td class="population">21,388</td>
+                        <td class="area">240.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.92s">
+                        <td class="number">46</td>
+                        <td class="country-name">Chile</td>
+                        <td class="capital-name">Santiago</td>
+                        <td class="population">16,746,491</td>
+                        <td class="area">756,950.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.9400000000000001s">
+                        <td class="number">47</td>
+                        <td class="country-name">Cameroon</td>
+                        <td class="capital-name">Yaoundé</td>
+                        <td class="population">19,294,149</td>
+                        <td class="area">475,440.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.96s">
+                        <td class="number">48</td>
+                        <td class="country-name">China</td>
+                        <td class="capital-name">Beijing</td>
+                        <td class="population">1,330,044,000</td>
+                        <td class="area">9,596,960.0</td>
+                    </tr>
+                    <tr style="animation-delay: 0.98s">
+                        <td class="number">49</td>
+                        <td class="country-name">Colombia</td>
+                        <td class="capital-name">Bogotá</td>
+                        <td class="population">47,790,000</td>
+                        <td class="area">1,138,910.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.0s">
+                        <td class="number">50</td>
+                        <td class="country-name">Costa Rica</td>
+                        <td class="capital-name">San José</td>
+                        <td class="population">4,516,220</td>
+                        <td class="area">51,100.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.02s">
+                        <td class="number">51</td>
+                        <td class="country-name">Cuba</td>
+                        <td class="capital-name">Havana</td>
+                        <td class="population">11,423,000</td>
+                        <td class="area">110,860.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.04s">
+                        <td class="number">52</td>
+                        <td class="country-name">Cape Verde</td>
+                        <td class="capital-name">Praia</td>
+                        <td class="population">508,659</td>
+                        <td class="area">4,033.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.06s">
+                        <td class="number">53</td>
+                        <td class="country-name">Curacao</td>
+                        <td class="capital-name">Willemstad</td>
+                        <td class="population">141,766</td>
+                        <td class="area">444.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.08s">
+                        <td class="number">54</td>
+                        <td class="country-name">Christmas Island</td>
+                        <td class="capital-name">Flying Fish Cove</td>
+                        <td class="population">1,500</td>
+                        <td class="area">135.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.1s">
+                        <td class="number">55</td>
+                        <td class="country-name">Cyprus</td>
+                        <td class="capital-name">Nicosia</td>
+                        <td class="population">1,102,677</td>
+                        <td class="area">9,250.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.12s">
+                        <td class="number">56</td>
+                        <td class="country-name">Czech Republic</td>
+                        <td class="capital-name">Prague</td>
+                        <td class="population">10,476,000</td>
+                        <td class="area">78,866.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.1400000000000001s">
+                        <td class="number">57</td>
+                        <td class="country-name">Germany</td>
+                        <td class="capital-name">Berlin</td>
+                        <td class="population">81,802,257</td>
+                        <td class="area">357,021.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.16s">
+                        <td class="number">58</td>
+                        <td class="country-name">Djibouti</td>
+                        <td class="capital-name">Djibouti</td>
+                        <td class="population">740,528</td>
+                        <td class="area">23,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.18s">
+                        <td class="number">59</td>
+                        <td class="country-name">Denmark</td>
+                        <td class="capital-name">Copenhagen</td>
+                        <td class="population">5,484,000</td>
+                        <td class="area">43,094.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.2s">
+                        <td class="number">60</td>
+                        <td class="country-name">Dominica</td>
+                        <td class="capital-name">Roseau</td>
+                        <td class="population">72,813</td>
+                        <td class="area">754.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.22s">
+                        <td class="number">61</td>
+                        <td class="country-name">Dominican Republic</td>
+                        <td class="capital-name">Santo Domingo</td>
+                        <td class="population">9,823,821</td>
+                        <td class="area">48,730.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.24s">
+                        <td class="number">62</td>
+                        <td class="country-name">Algeria</td>
+                        <td class="capital-name">Algiers</td>
+                        <td class="population">34,586,184</td>
+                        <td class="area">2,381,740.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.26s">
+                        <td class="number">63</td>
+                        <td class="country-name">Ecuador</td>
+                        <td class="capital-name">Quito</td>
+                        <td class="population">14,790,608</td>
+                        <td class="area">283,560.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.28s">
+                        <td class="number">64</td>
+                        <td class="country-name">Estonia</td>
+                        <td class="capital-name">Tallinn</td>
+                        <td class="population">1,291,170</td>
+                        <td class="area">45,226.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.3s">
+                        <td class="number">65</td>
+                        <td class="country-name">Egypt</td>
+                        <td class="capital-name">Cairo</td>
+                        <td class="population">80,471,869</td>
+                        <td class="area">1,001,450.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.32s">
+                        <td class="number">66</td>
+                        <td class="country-name">Western Sahara</td>
+                        <td class="capital-name">Laâyoune / El Aaiún</td>
+                        <td class="population">273,008</td>
+                        <td class="area">266,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.34s">
+                        <td class="number">67</td>
+                        <td class="country-name">Eritrea</td>
+                        <td class="capital-name">Asmara</td>
+                        <td class="population">5,792,984</td>
+                        <td class="area">121,320.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.36s">
+                        <td class="number">68</td>
+                        <td class="country-name">Spain</td>
+                        <td class="capital-name">Madrid</td>
+                        <td class="population">46,505,963</td>
+                        <td class="area">504,782.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.3800000000000001s">
+                        <td class="number">69</td>
+                        <td class="country-name">Ethiopia</td>
+                        <td class="capital-name">Addis Ababa</td>
+                        <td class="population">88,013,491</td>
+                        <td class="area">1,127,127.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.4000000000000001s">
+                        <td class="number">70</td>
+                        <td class="country-name">Finland</td>
+                        <td class="capital-name">Helsinki</td>
+                        <td class="population">5,244,000</td>
+                        <td class="area">337,030.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.42s">
+                        <td class="number">71</td>
+                        <td class="country-name">Fiji</td>
+                        <td class="capital-name">Suva</td>
+                        <td class="population">875,983</td>
+                        <td class="area">18,270.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.44s">
+                        <td class="number">72</td>
+                        <td class="country-name">Falkland Islands</td>
+                        <td class="capital-name">Stanley</td>
+                        <td class="population">2,638</td>
+                        <td class="area">12,173.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.46s">
+                        <td class="number">73</td>
+                        <td class="country-name">Micronesia</td>
+                        <td class="capital-name">Palikir</td>
+                        <td class="population">107,708</td>
+                        <td class="area">702.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.48s">
+                        <td class="number">74</td>
+                        <td class="country-name">Faroe Islands</td>
+                        <td class="capital-name">Tórshavn</td>
+                        <td class="population">48,228</td>
+                        <td class="area">1,399.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.5s">
+                        <td class="number">75</td>
+                        <td class="country-name">France</td>
+                        <td class="capital-name">Paris</td>
+                        <td class="population">64,768,389</td>
+                        <td class="area">547,030.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.52s">
+                        <td class="number">76</td>
+                        <td class="country-name">Gabon</td>
+                        <td class="capital-name">Libreville</td>
+                        <td class="population">1,545,255</td>
+                        <td class="area">267,667.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.54s">
+                        <td class="number">77</td>
+                        <td class="country-name">United Kingdom</td>
+                        <td class="capital-name">London</td>
+                        <td class="population">62,348,447</td>
+                        <td class="area">244,820.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.56s">
+                        <td class="number">78</td>
+                        <td class="country-name">Grenada</td>
+                        <td class="capital-name">St. George's</td>
+                        <td class="population">107,818</td>
+                        <td class="area">344.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.58s">
+                        <td class="number">79</td>
+                        <td class="country-name">Georgia</td>
+                        <td class="capital-name">Tbilisi</td>
+                        <td class="population">4,630,000</td>
+                        <td class="area">69,700.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.6s">
+                        <td class="number">80</td>
+                        <td class="country-name">French Guiana</td>
+                        <td class="capital-name">Cayenne</td>
+                        <td class="population">195,506</td>
+                        <td class="area">91,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.62s">
+                        <td class="number">81</td>
+                        <td class="country-name">Guernsey</td>
+                        <td class="capital-name">St Peter Port</td>
+                        <td class="population">65,228</td>
+                        <td class="area">78.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.6400000000000001s">
+                        <td class="number">82</td>
+                        <td class="country-name">Ghana</td>
+                        <td class="capital-name">Accra</td>
+                        <td class="population">24,339,838</td>
+                        <td class="area">239,460.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.6600000000000001s">
+                        <td class="number">83</td>
+                        <td class="country-name">Gibraltar</td>
+                        <td class="capital-name">Gibraltar</td>
+                        <td class="population">27,884</td>
+                        <td class="area">6.5</td>
+                    </tr>
+                    <tr style="animation-delay: 1.68s">
+                        <td class="number">84</td>
+                        <td class="country-name">Greenland</td>
+                        <td class="capital-name">Nuuk</td>
+                        <td class="population">56,375</td>
+                        <td class="area">2,166,086.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.7s">
+                        <td class="number">85</td>
+                        <td class="country-name">Gambia</td>
+                        <td class="capital-name">Bathurst</td>
+                        <td class="population">1,593,256</td>
+                        <td class="area">11,300.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.72s">
+                        <td class="number">86</td>
+                        <td class="country-name">Guinea</td>
+                        <td class="capital-name">Conakry</td>
+                        <td class="population">10,324,025</td>
+                        <td class="area">245,857.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.74s">
+                        <td class="number">87</td>
+                        <td class="country-name">Guadeloupe</td>
+                        <td class="capital-name">Basse-Terre</td>
+                        <td class="population">443,000</td>
+                        <td class="area">1,780.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.76s">
+                        <td class="number">88</td>
+                        <td class="country-name">Equatorial Guinea</td>
+                        <td class="capital-name">Malabo</td>
+                        <td class="population">1,014,999</td>
+                        <td class="area">28,051.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.78s">
+                        <td class="number">89</td>
+                        <td class="country-name">Greece</td>
+                        <td class="capital-name">Athens</td>
+                        <td class="population">11,000,000</td>
+                        <td class="area">131,940.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.8s">
+                        <td class="number">90</td>
+                        <td class="country-name">South Georgia and the South Sandwich Islands</td>
+                        <td class="capital-name">Grytviken</td>
+                        <td class="population">30</td>
+                        <td class="area">3,903.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.82s">
+                        <td class="number">91</td>
+                        <td class="country-name">Guatemala</td>
+                        <td class="capital-name">Guatemala City</td>
+                        <td class="population">13,550,440</td>
+                        <td class="area">108,890.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.84s">
+                        <td class="number">92</td>
+                        <td class="country-name">Guam</td>
+                        <td class="capital-name">Hagåtña</td>
+                        <td class="population">159,358</td>
+                        <td class="area">549.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.86s">
+                        <td class="number">93</td>
+                        <td class="country-name">Guinea-Bissau</td>
+                        <td class="capital-name">Bissau</td>
+                        <td class="population">1,565,126</td>
+                        <td class="area">36,120.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.8800000000000001s">
+                        <td class="number">94</td>
+                        <td class="country-name">Guyana</td>
+                        <td class="capital-name">Georgetown</td>
+                        <td class="population">748,486</td>
+                        <td class="area">214,970.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.9000000000000001s">
+                        <td class="number">95</td>
+                        <td class="country-name">Hong Kong</td>
+                        <td class="capital-name">Hong Kong</td>
+                        <td class="population">6,898,686</td>
+                        <td class="area">1,092.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.92s">
+                        <td class="number">96</td>
+                        <td class="country-name">Heard Island and McDonald Islands</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">-</td>
+                        <td class="area">412.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.94s">
+                        <td class="number">97</td>
+                        <td class="country-name">Honduras</td>
+                        <td class="capital-name">Tegucigalpa</td>
+                        <td class="population">7,989,415</td>
+                        <td class="area">112,090.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.96s">
+                        <td class="number">98</td>
+                        <td class="country-name">Croatia</td>
+                        <td class="capital-name">Zagreb</td>
+                        <td class="population">4,491,000</td>
+                        <td class="area">56,542.0</td>
+                    </tr>
+                    <tr style="animation-delay: 1.98s">
+                        <td class="number">99</td>
+                        <td class="country-name">Haiti</td>
+                        <td class="capital-name">Port-au-Prince</td>
+                        <td class="population">9,648,924</td>
+                        <td class="area">27,750.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.0s">
+                        <td class="number">100</td>
+                        <td class="country-name">Hungary</td>
+                        <td class="capital-name">Budapest</td>
+                        <td class="population">9,982,000</td>
+                        <td class="area">93,030.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.02s">
+                        <td class="number">101</td>
+                        <td class="country-name">Indonesia</td>
+                        <td class="capital-name">Jakarta</td>
+                        <td class="population">242,968,342</td>
+                        <td class="area">1,919,440.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.04s">
+                        <td class="number">102</td>
+                        <td class="country-name">Ireland</td>
+                        <td class="capital-name">Dublin</td>
+                        <td class="population">4,622,917</td>
+                        <td class="area">70,280.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.06s">
+                        <td class="number">103</td>
+                        <td class="country-name">Israel</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">7,353,985</td>
+                        <td class="area">20,770.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.08s">
+                        <td class="number">104</td>
+                        <td class="country-name">Isle of Man</td>
+                        <td class="capital-name">Douglas</td>
+                        <td class="population">75,049</td>
+                        <td class="area">572.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.1s">
+                        <td class="number">105</td>
+                        <td class="country-name">India</td>
+                        <td class="capital-name">New Delhi</td>
+                        <td class="population">1,173,108,018</td>
+                        <td class="area">3,287,590.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.12s">
+                        <td class="number">106</td>
+                        <td class="country-name">British Indian Ocean Territory</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">4,000</td>
+                        <td class="area">60.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.14s">
+                        <td class="number">107</td>
+                        <td class="country-name">Iraq</td>
+                        <td class="capital-name">Baghdad</td>
+                        <td class="population">29,671,605</td>
+                        <td class="area">437,072.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.16s">
+                        <td class="number">108</td>
+                        <td class="country-name">Iran</td>
+                        <td class="capital-name">Tehran</td>
+                        <td class="population">76,923,300</td>
+                        <td class="area">1,648,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.18s">
+                        <td class="number">109</td>
+                        <td class="country-name">Iceland</td>
+                        <td class="capital-name">Reykjavik</td>
+                        <td class="population">308,910</td>
+                        <td class="area">103,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.2s">
+                        <td class="number">110</td>
+                        <td class="country-name">Italy</td>
+                        <td class="capital-name">Rome</td>
+                        <td class="population">60,340,328</td>
+                        <td class="area">301,230.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.22s">
+                        <td class="number">111</td>
+                        <td class="country-name">Jersey</td>
+                        <td class="capital-name">Saint Helier</td>
+                        <td class="population">90,812</td>
+                        <td class="area">116.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.24s">
+                        <td class="number">112</td>
+                        <td class="country-name">Jamaica</td>
+                        <td class="capital-name">Kingston</td>
+                        <td class="population">2,847,232</td>
+                        <td class="area">10,991.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.2600000000000002s">
+                        <td class="number">113</td>
+                        <td class="country-name">Jordan</td>
+                        <td class="capital-name">Amman</td>
+                        <td class="population">6,407,085</td>
+                        <td class="area">92,300.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.2800000000000002s">
+                        <td class="number">114</td>
+                        <td class="country-name">Japan</td>
+                        <td class="capital-name">Tokyo</td>
+                        <td class="population">127,288,000</td>
+                        <td class="area">377,835.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.3000000000000003s">
+                        <td class="number">115</td>
+                        <td class="country-name">Kenya</td>
+                        <td class="capital-name">Nairobi</td>
+                        <td class="population">40,046,566</td>
+                        <td class="area">582,650.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.32s">
+                        <td class="number">116</td>
+                        <td class="country-name">Kyrgyzstan</td>
+                        <td class="capital-name">Bishkek</td>
+                        <td class="population">5,776,500</td>
+                        <td class="area">198,500.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.34s">
+                        <td class="number">117</td>
+                        <td class="country-name">Cambodia</td>
+                        <td class="capital-name">Phnom Penh</td>
+                        <td class="population">14,453,680</td>
+                        <td class="area">181,040.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.36s">
+                        <td class="number">118</td>
+                        <td class="country-name">Kiribati</td>
+                        <td class="capital-name">Tarawa</td>
+                        <td class="population">92,533</td>
+                        <td class="area">811.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.38s">
+                        <td class="number">119</td>
+                        <td class="country-name">Comoros</td>
+                        <td class="capital-name">Moroni</td>
+                        <td class="population">773,407</td>
+                        <td class="area">2,170.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.4s">
+                        <td class="number">120</td>
+                        <td class="country-name">Saint Kitts and Nevis</td>
+                        <td class="capital-name">Basseterre</td>
+                        <td class="population">51,134</td>
+                        <td class="area">261.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.42s">
+                        <td class="number">121</td>
+                        <td class="country-name">North Korea</td>
+                        <td class="capital-name">Pyongyang</td>
+                        <td class="population">22,912,177</td>
+                        <td class="area">120,540.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.44s">
+                        <td class="number">122</td>
+                        <td class="country-name">South Korea</td>
+                        <td class="capital-name">Seoul</td>
+                        <td class="population">48,422,644</td>
+                        <td class="area">98,480.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.46s">
+                        <td class="number">123</td>
+                        <td class="country-name">Kuwait</td>
+                        <td class="capital-name">Kuwait City</td>
+                        <td class="population">2,789,132</td>
+                        <td class="area">17,820.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.48s">
+                        <td class="number">124</td>
+                        <td class="country-name">Cayman Islands</td>
+                        <td class="capital-name">George Town</td>
+                        <td class="population">44,270</td>
+                        <td class="area">262.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.5s">
+                        <td class="number">125</td>
+                        <td class="country-name">Kazakhstan</td>
+                        <td class="capital-name">Astana</td>
+                        <td class="population">15,340,000</td>
+                        <td class="area">2,717,300.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.52s">
+                        <td class="number">126</td>
+                        <td class="country-name">Laos</td>
+                        <td class="capital-name">Vientiane</td>
+                        <td class="population">6,368,162</td>
+                        <td class="area">236,800.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.54s">
+                        <td class="number">127</td>
+                        <td class="country-name">Lebanon</td>
+                        <td class="capital-name">Beirut</td>
+                        <td class="population">4,125,247</td>
+                        <td class="area">10,400.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.56s">
+                        <td class="number">128</td>
+                        <td class="country-name">Saint Lucia</td>
+                        <td class="capital-name">Castries</td>
+                        <td class="population">160,922</td>
+                        <td class="area">616.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.58s">
+                        <td class="number">129</td>
+                        <td class="country-name">Liechtenstein</td>
+                        <td class="capital-name">Vaduz</td>
+                        <td class="population">35,000</td>
+                        <td class="area">160.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.6s">
+                        <td class="number">130</td>
+                        <td class="country-name">Sri Lanka</td>
+                        <td class="capital-name">Colombo</td>
+                        <td class="population">21,513,990</td>
+                        <td class="area">65,610.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.62s">
+                        <td class="number">131</td>
+                        <td class="country-name">Liberia</td>
+                        <td class="capital-name">Monrovia</td>
+                        <td class="population">3,685,076</td>
+                        <td class="area">111,370.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.64s">
+                        <td class="number">132</td>
+                        <td class="country-name">Lesotho</td>
+                        <td class="capital-name">Maseru</td>
+                        <td class="population">1,919,552</td>
+                        <td class="area">30,355.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.66s">
+                        <td class="number">133</td>
+                        <td class="country-name">Lithuania</td>
+                        <td class="capital-name">Vilnius</td>
+                        <td class="population">2,944,459</td>
+                        <td class="area">65,200.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.68s">
+                        <td class="number">134</td>
+                        <td class="country-name">Luxembourg</td>
+                        <td class="capital-name">Luxembourg</td>
+                        <td class="population">497,538</td>
+                        <td class="area">2,586.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.7s">
+                        <td class="number">135</td>
+                        <td class="country-name">Latvia</td>
+                        <td class="capital-name">Riga</td>
+                        <td class="population">2,217,969</td>
+                        <td class="area">64,589.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.72s">
+                        <td class="number">136</td>
+                        <td class="country-name">Libya</td>
+                        <td class="capital-name">Tripoli</td>
+                        <td class="population">6,461,454</td>
+                        <td class="area">1,759,540.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.74s">
+                        <td class="number">137</td>
+                        <td class="country-name">Morocco</td>
+                        <td class="capital-name">Rabat</td>
+                        <td class="population">31,627,428</td>
+                        <td class="area">446,550.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.7600000000000002s">
+                        <td class="number">138</td>
+                        <td class="country-name">Monaco</td>
+                        <td class="capital-name">Monaco</td>
+                        <td class="population">32,965</td>
+                        <td class="area">1.9</td>
+                    </tr>
+                    <tr style="animation-delay: 2.7800000000000002s">
+                        <td class="number">139</td>
+                        <td class="country-name">Moldova</td>
+                        <td class="capital-name">Chişinău</td>
+                        <td class="population">4,324,000</td>
+                        <td class="area">33,843.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.8000000000000003s">
+                        <td class="number">140</td>
+                        <td class="country-name">Montenegro</td>
+                        <td class="capital-name">Podgorica</td>
+                        <td class="population">666,730</td>
+                        <td class="area">14,026.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.82s">
+                        <td class="number">141</td>
+                        <td class="country-name">Saint Martin</td>
+                        <td class="capital-name">Marigot</td>
+                        <td class="population">35,925</td>
+                        <td class="area">53.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.84s">
+                        <td class="number">142</td>
+                        <td class="country-name">Madagascar</td>
+                        <td class="capital-name">Antananarivo</td>
+                        <td class="population">21,281,844</td>
+                        <td class="area">587,040.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.86s">
+                        <td class="number">143</td>
+                        <td class="country-name">Marshall Islands</td>
+                        <td class="capital-name">Majuro</td>
+                        <td class="population">65,859</td>
+                        <td class="area">181.3</td>
+                    </tr>
+                    <tr style="animation-delay: 2.88s">
+                        <td class="number">144</td>
+                        <td class="country-name">Macedonia</td>
+                        <td class="capital-name">Skopje</td>
+                        <td class="population">2,062,294</td>
+                        <td class="area">25,333.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.9s">
+                        <td class="number">145</td>
+                        <td class="country-name">Mali</td>
+                        <td class="capital-name">Bamako</td>
+                        <td class="population">13,796,354</td>
+                        <td class="area">1,240,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.92s">
+                        <td class="number">146</td>
+                        <td class="country-name">Myanmar [Burma]</td>
+                        <td class="capital-name">Naypyitaw</td>
+                        <td class="population">53,414,374</td>
+                        <td class="area">678,500.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.94s">
+                        <td class="number">147</td>
+                        <td class="country-name">Mongolia</td>
+                        <td class="capital-name">Ulan Bator</td>
+                        <td class="population">3,086,918</td>
+                        <td class="area">1,565,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.96s">
+                        <td class="number">148</td>
+                        <td class="country-name">Macao</td>
+                        <td class="capital-name">Macao</td>
+                        <td class="population">449,198</td>
+                        <td class="area">254.0</td>
+                    </tr>
+                    <tr style="animation-delay: 2.98s">
+                        <td class="number">149</td>
+                        <td class="country-name">Northern Mariana Islands</td>
+                        <td class="capital-name">Saipan</td>
+                        <td class="population">53,883</td>
+                        <td class="area">477.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.0s">
+                        <td class="number">150</td>
+                        <td class="country-name">Martinique</td>
+                        <td class="capital-name">Fort-de-France</td>
+                        <td class="population">432,900</td>
+                        <td class="area">1,100.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.02s">
+                        <td class="number">151</td>
+                        <td class="country-name">Mauritania</td>
+                        <td class="capital-name">Nouakchott</td>
+                        <td class="population">3,205,060</td>
+                        <td class="area">1,030,700.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.04s">
+                        <td class="number">152</td>
+                        <td class="country-name">Montserrat</td>
+                        <td class="capital-name">Plymouth</td>
+                        <td class="population">9,341</td>
+                        <td class="area">102.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.06s">
+                        <td class="number">153</td>
+                        <td class="country-name">Malta</td>
+                        <td class="capital-name">Valletta</td>
+                        <td class="population">403,000</td>
+                        <td class="area">316.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.08s">
+                        <td class="number">154</td>
+                        <td class="country-name">Mauritius</td>
+                        <td class="capital-name">Port Louis</td>
+                        <td class="population">1,294,104</td>
+                        <td class="area">2,040.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.1s">
+                        <td class="number">155</td>
+                        <td class="country-name">Maldives</td>
+                        <td class="capital-name">Malé</td>
+                        <td class="population">395,650</td>
+                        <td class="area">300.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.12s">
+                        <td class="number">156</td>
+                        <td class="country-name">Malawi</td>
+                        <td class="capital-name">Lilongwe</td>
+                        <td class="population">15,447,500</td>
+                        <td class="area">118,480.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.14s">
+                        <td class="number">157</td>
+                        <td class="country-name">Mexico</td>
+                        <td class="capital-name">Mexico City</td>
+                        <td class="population">112,468,855</td>
+                        <td class="area">1,972,550.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.16s">
+                        <td class="number">158</td>
+                        <td class="country-name">Malaysia</td>
+                        <td class="capital-name">Kuala Lumpur</td>
+                        <td class="population">28,274,729</td>
+                        <td class="area">329,750.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.18s">
+                        <td class="number">159</td>
+                        <td class="country-name">Mozambique</td>
+                        <td class="capital-name">Maputo</td>
+                        <td class="population">22,061,451</td>
+                        <td class="area">801,590.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.2s">
+                        <td class="number">160</td>
+                        <td class="country-name">Namibia</td>
+                        <td class="capital-name">Windhoek</td>
+                        <td class="population">2,128,471</td>
+                        <td class="area">825,418.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.22s">
+                        <td class="number">161</td>
+                        <td class="country-name">New Caledonia</td>
+                        <td class="capital-name">Noumea</td>
+                        <td class="population">216,494</td>
+                        <td class="area">19,060.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.24s">
+                        <td class="number">162</td>
+                        <td class="country-name">Niger</td>
+                        <td class="capital-name">Niamey</td>
+                        <td class="population">15,878,271</td>
+                        <td class="area">1,267,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.2600000000000002s">
+                        <td class="number">163</td>
+                        <td class="country-name">Norfolk Island</td>
+                        <td class="capital-name">Kingston</td>
+                        <td class="population">1,828</td>
+                        <td class="area">34.6</td>
+                    </tr>
+                    <tr style="animation-delay: 3.2800000000000002s">
+                        <td class="number">164</td>
+                        <td class="country-name">Nigeria</td>
+                        <td class="capital-name">Abuja</td>
+                        <td class="population">154,000,000</td>
+                        <td class="area">923,768.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.3000000000000003s">
+                        <td class="number">165</td>
+                        <td class="country-name">Nicaragua</td>
+                        <td class="capital-name">Managua</td>
+                        <td class="population">5,995,928</td>
+                        <td class="area">129,494.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.3200000000000003s">
+                        <td class="number">166</td>
+                        <td class="country-name">Netherlands</td>
+                        <td class="capital-name">Amsterdam</td>
+                        <td class="population">16,645,000</td>
+                        <td class="area">41,526.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.34s">
+                        <td class="number">167</td>
+                        <td class="country-name">Norway</td>
+                        <td class="capital-name">Oslo</td>
+                        <td class="population">5,009,150</td>
+                        <td class="area">324,220.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.36s">
+                        <td class="number">168</td>
+                        <td class="country-name">Nepal</td>
+                        <td class="capital-name">Kathmandu</td>
+                        <td class="population">28,951,852</td>
+                        <td class="area">140,800.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.38s">
+                        <td class="number">169</td>
+                        <td class="country-name">Nauru</td>
+                        <td class="capital-name">Yaren</td>
+                        <td class="population">10,065</td>
+                        <td class="area">21.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.4s">
+                        <td class="number">170</td>
+                        <td class="country-name">Niue</td>
+                        <td class="capital-name">Alofi</td>
+                        <td class="population">2,166</td>
+                        <td class="area">260.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.42s">
+                        <td class="number">171</td>
+                        <td class="country-name">New Zealand</td>
+                        <td class="capital-name">Wellington</td>
+                        <td class="population">4,252,277</td>
+                        <td class="area">268,680.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.44s">
+                        <td class="number">172</td>
+                        <td class="country-name">Oman</td>
+                        <td class="capital-name">Muscat</td>
+                        <td class="population">2,967,717</td>
+                        <td class="area">212,460.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.46s">
+                        <td class="number">173</td>
+                        <td class="country-name">Panama</td>
+                        <td class="capital-name">Panama City</td>
+                        <td class="population">3,410,676</td>
+                        <td class="area">78,200.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.48s">
+                        <td class="number">174</td>
+                        <td class="country-name">Peru</td>
+                        <td class="capital-name">Lima</td>
+                        <td class="population">29,907,003</td>
+                        <td class="area">1,285,220.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.5s">
+                        <td class="number">175</td>
+                        <td class="country-name">French Polynesia</td>
+                        <td class="capital-name">Papeete</td>
+                        <td class="population">270,485</td>
+                        <td class="area">4,167.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.52s">
+                        <td class="number">176</td>
+                        <td class="country-name">Papua New Guinea</td>
+                        <td class="capital-name">Port Moresby</td>
+                        <td class="population">6,064,515</td>
+                        <td class="area">462,840.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.54s">
+                        <td class="number">177</td>
+                        <td class="country-name">Philippines</td>
+                        <td class="capital-name">Manila</td>
+                        <td class="population">99,900,177</td>
+                        <td class="area">300,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.56s">
+                        <td class="number">178</td>
+                        <td class="country-name">Pakistan</td>
+                        <td class="capital-name">Islamabad</td>
+                        <td class="population">184,404,791</td>
+                        <td class="area">803,940.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.58s">
+                        <td class="number">179</td>
+                        <td class="country-name">Poland</td>
+                        <td class="capital-name">Warsaw</td>
+                        <td class="population">38,500,000</td>
+                        <td class="area">312,685.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.6s">
+                        <td class="number">180</td>
+                        <td class="country-name">Saint Pierre and Miquelon</td>
+                        <td class="capital-name">Saint-Pierre</td>
+                        <td class="population">7,012</td>
+                        <td class="area">242.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.62s">
+                        <td class="number">181</td>
+                        <td class="country-name">Pitcairn Islands</td>
+                        <td class="capital-name">Adamstown</td>
+                        <td class="population">46</td>
+                        <td class="area">47.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.64s">
+                        <td class="number">182</td>
+                        <td class="country-name">Puerto Rico</td>
+                        <td class="capital-name">San Juan</td>
+                        <td class="population">3,916,632</td>
+                        <td class="area">9,104.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.66s">
+                        <td class="number">183</td>
+                        <td class="country-name">Palestine</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">3,800,000</td>
+                        <td class="area">5,970.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.68s">
+                        <td class="number">184</td>
+                        <td class="country-name">Portugal</td>
+                        <td class="capital-name">Lisbon</td>
+                        <td class="population">10,676,000</td>
+                        <td class="area">92,391.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.7s">
+                        <td class="number">185</td>
+                        <td class="country-name">Palau</td>
+                        <td class="capital-name">Melekeok</td>
+                        <td class="population">19,907</td>
+                        <td class="area">458.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.72s">
+                        <td class="number">186</td>
+                        <td class="country-name">Paraguay</td>
+                        <td class="capital-name">Asunción</td>
+                        <td class="population">6,375,830</td>
+                        <td class="area">406,750.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.74s">
+                        <td class="number">187</td>
+                        <td class="country-name">Qatar</td>
+                        <td class="capital-name">Doha</td>
+                        <td class="population">840,926</td>
+                        <td class="area">11,437.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.7600000000000002s">
+                        <td class="number">188</td>
+                        <td class="country-name">Réunion</td>
+                        <td class="capital-name">Saint-Denis</td>
+                        <td class="population">776,948</td>
+                        <td class="area">2,517.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.7800000000000002s">
+                        <td class="number">189</td>
+                        <td class="country-name">Romania</td>
+                        <td class="capital-name">Bucharest</td>
+                        <td class="population">21,959,278</td>
+                        <td class="area">237,500.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.8000000000000003s">
+                        <td class="number">190</td>
+                        <td class="country-name">Serbia</td>
+                        <td class="capital-name">Belgrade</td>
+                        <td class="population">7,344,847</td>
+                        <td class="area">88,361.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.8200000000000003s">
+                        <td class="number">191</td>
+                        <td class="country-name">Russia</td>
+                        <td class="capital-name">Moscow</td>
+                        <td class="population">140,702,000</td>
+                        <td class="area">-</td>
+                    </tr>
+                    <tr style="animation-delay: 3.84s">
+                        <td class="number">192</td>
+                        <td class="country-name">Rwanda</td>
+                        <td class="capital-name">Kigali</td>
+                        <td class="population">11,055,976</td>
+                        <td class="area">26,338.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.86s">
+                        <td class="number">193</td>
+                        <td class="country-name">Saudi Arabia</td>
+                        <td class="capital-name">Riyadh</td>
+                        <td class="population">25,731,776</td>
+                        <td class="area">1,960,582.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.88s">
+                        <td class="number">194</td>
+                        <td class="country-name">Solomon Islands</td>
+                        <td class="capital-name">Honiara</td>
+                        <td class="population">559,198</td>
+                        <td class="area">28,450.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.9s">
+                        <td class="number">195</td>
+                        <td class="country-name">Seychelles</td>
+                        <td class="capital-name">Victoria</td>
+                        <td class="population">88,340</td>
+                        <td class="area">455.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.92s">
+                        <td class="number">196</td>
+                        <td class="country-name">Sudan</td>
+                        <td class="capital-name">Khartoum</td>
+                        <td class="population">35,000,000</td>
+                        <td class="area">1,861,484.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.94s">
+                        <td class="number">197</td>
+                        <td class="country-name">Sweden</td>
+                        <td class="capital-name">Stockholm</td>
+                        <td class="population">9,828,655</td>
+                        <td class="area">449,964.0</td>
+                    </tr>
+                    <tr style="animation-delay: 3.96s">
+                        <td class="number">198</td>
+                        <td class="country-name">Singapore</td>
+                        <td class="capital-name">Singapore</td>
+                        <td class="population">4,701,069</td>
+                        <td class="area">692.7</td>
+                    </tr>
+                    <tr style="animation-delay: 3.98s">
+                        <td class="number">199</td>
+                        <td class="country-name">Saint Helena</td>
+                        <td class="capital-name">Jamestown</td>
+                        <td class="population">7,460</td>
+                        <td class="area">410.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.0s">
+                        <td class="number">200</td>
+                        <td class="country-name">Slovenia</td>
+                        <td class="capital-name">Ljubljana</td>
+                        <td class="population">2,007,000</td>
+                        <td class="area">20,273.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.0200000000000005s">
+                        <td class="number">201</td>
+                        <td class="country-name">Svalbard and Jan Mayen</td>
+                        <td class="capital-name">Longyearbyen</td>
+                        <td class="population">2,550</td>
+                        <td class="area">62,049.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.04s">
+                        <td class="number">202</td>
+                        <td class="country-name">Slovakia</td>
+                        <td class="capital-name">Bratislava</td>
+                        <td class="population">5,455,000</td>
+                        <td class="area">48,845.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.0600000000000005s">
+                        <td class="number">203</td>
+                        <td class="country-name">Sierra Leone</td>
+                        <td class="capital-name">Freetown</td>
+                        <td class="population">5,245,695</td>
+                        <td class="area">71,740.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.08s">
+                        <td class="number">204</td>
+                        <td class="country-name">San Marino</td>
+                        <td class="capital-name">San Marino</td>
+                        <td class="population">31,477</td>
+                        <td class="area">61.2</td>
+                    </tr>
+                    <tr style="animation-delay: 4.1s">
+                        <td class="number">205</td>
+                        <td class="country-name">Senegal</td>
+                        <td class="capital-name">Dakar</td>
+                        <td class="population">12,323,252</td>
+                        <td class="area">196,190.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.12s">
+                        <td class="number">206</td>
+                        <td class="country-name">Somalia</td>
+                        <td class="capital-name">Mogadishu</td>
+                        <td class="population">10,112,453</td>
+                        <td class="area">637,657.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.14s">
+                        <td class="number">207</td>
+                        <td class="country-name">Suriname</td>
+                        <td class="capital-name">Paramaribo</td>
+                        <td class="population">492,829</td>
+                        <td class="area">163,270.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.16s">
+                        <td class="number">208</td>
+                        <td class="country-name">South Sudan</td>
+                        <td class="capital-name">Juba</td>
+                        <td class="population">8,260,490</td>
+                        <td class="area">644,329.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.18s">
+                        <td class="number">209</td>
+                        <td class="country-name">São Tomé and Príncipe</td>
+                        <td class="capital-name">São Tomé</td>
+                        <td class="population">175,808</td>
+                        <td class="area">1,001.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.2s">
+                        <td class="number">210</td>
+                        <td class="country-name">El Salvador</td>
+                        <td class="capital-name">San Salvador</td>
+                        <td class="population">6,052,064</td>
+                        <td class="area">21,040.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.22s">
+                        <td class="number">211</td>
+                        <td class="country-name">Sint Maarten</td>
+                        <td class="capital-name">Philipsburg</td>
+                        <td class="population">37,429</td>
+                        <td class="area">21.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.24s">
+                        <td class="number">212</td>
+                        <td class="country-name">Syria</td>
+                        <td class="capital-name">Damascus</td>
+                        <td class="population">22,198,110</td>
+                        <td class="area">185,180.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.26s">
+                        <td class="number">213</td>
+                        <td class="country-name">Swaziland</td>
+                        <td class="capital-name">Mbabane</td>
+                        <td class="population">1,354,051</td>
+                        <td class="area">17,363.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.28s">
+                        <td class="number">214</td>
+                        <td class="country-name">Turks and Caicos Islands</td>
+                        <td class="capital-name">Cockburn Town</td>
+                        <td class="population">20,556</td>
+                        <td class="area">430.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.3s">
+                        <td class="number">215</td>
+                        <td class="country-name">Chad</td>
+                        <td class="capital-name">N'Djamena</td>
+                        <td class="population">10,543,464</td>
+                        <td class="area">1,284,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.32s">
+                        <td class="number">216</td>
+                        <td class="country-name">French Southern Territories</td>
+                        <td class="capital-name">Port-aux-Français</td>
+                        <td class="population">140</td>
+                        <td class="area">7,829.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.34s">
+                        <td class="number">217</td>
+                        <td class="country-name">Togo</td>
+                        <td class="capital-name">Lomé</td>
+                        <td class="population">6,587,239</td>
+                        <td class="area">56,785.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.36s">
+                        <td class="number">218</td>
+                        <td class="country-name">Thailand</td>
+                        <td class="capital-name">Bangkok</td>
+                        <td class="population">67,089,500</td>
+                        <td class="area">514,000.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.38s">
+                        <td class="number">219</td>
+                        <td class="country-name">Tajikistan</td>
+                        <td class="capital-name">Dushanbe</td>
+                        <td class="population">7,487,489</td>
+                        <td class="area">143,100.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.4s">
+                        <td class="number">220</td>
+                        <td class="country-name">Tokelau</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">1,466</td>
+                        <td class="area">10.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.42s">
+                        <td class="number">221</td>
+                        <td class="country-name">East Timor</td>
+                        <td class="capital-name">Dili</td>
+                        <td class="population">1,154,625</td>
+                        <td class="area">15,007.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.44s">
+                        <td class="number">222</td>
+                        <td class="country-name">Turkmenistan</td>
+                        <td class="capital-name">Ashgabat</td>
+                        <td class="population">4,940,916</td>
+                        <td class="area">488,100.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.46s">
+                        <td class="number">223</td>
+                        <td class="country-name">Tunisia</td>
+                        <td class="capital-name">Tunis</td>
+                        <td class="population">10,589,025</td>
+                        <td class="area">163,610.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.48s">
+                        <td class="number">224</td>
+                        <td class="country-name">Tonga</td>
+                        <td class="capital-name">Nuku'alofa</td>
+                        <td class="population">122,580</td>
+                        <td class="area">748.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.5s">
+                        <td class="number">225</td>
+                        <td class="country-name">Turkey</td>
+                        <td class="capital-name">Ankara</td>
+                        <td class="population">77,804,122</td>
+                        <td class="area">780,580.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.5200000000000005s">
+                        <td class="number">226</td>
+                        <td class="country-name">Trinidad and Tobago</td>
+                        <td class="capital-name">Port of Spain</td>
+                        <td class="population">1,228,691</td>
+                        <td class="area">5,128.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.54s">
+                        <td class="number">227</td>
+                        <td class="country-name">Tuvalu</td>
+                        <td class="capital-name">Funafuti</td>
+                        <td class="population">10,472</td>
+                        <td class="area">26.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.5600000000000005s">
+                        <td class="number">228</td>
+                        <td class="country-name">Taiwan</td>
+                        <td class="capital-name">Taipei</td>
+                        <td class="population">22,894,384</td>
+                        <td class="area">35,980.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.58s">
+                        <td class="number">229</td>
+                        <td class="country-name">Tanzania</td>
+                        <td class="capital-name">Dodoma</td>
+                        <td class="population">41,892,895</td>
+                        <td class="area">945,087.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.6000000000000005s">
+                        <td class="number">230</td>
+                        <td class="country-name">Ukraine</td>
+                        <td class="capital-name">Kiev</td>
+                        <td class="population">45,415,596</td>
+                        <td class="area">603,700.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.62s">
+                        <td class="number">231</td>
+                        <td class="country-name">Uganda</td>
+                        <td class="capital-name">Kampala</td>
+                        <td class="population">33,398,682</td>
+                        <td class="area">236,040.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.64s">
+                        <td class="number">232</td>
+                        <td class="country-name">U.S. Minor Outlying Islands</td>
+                        <td class="capital-name">None</td>
+                        <td class="population">-</td>
+                        <td class="area">-</td>
+                    </tr>
+                    <tr style="animation-delay: 4.66s">
+                        <td class="number">233</td>
+                        <td class="country-name">United States</td>
+                        <td class="capital-name">Washington</td>
+                        <td class="population">310,232,863</td>
+                        <td class="area">9,629,091.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.68s">
+                        <td class="number">234</td>
+                        <td class="country-name">Uruguay</td>
+                        <td class="capital-name">Montevideo</td>
+                        <td class="population">3,477,000</td>
+                        <td class="area">176,220.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.7s">
+                        <td class="number">235</td>
+                        <td class="country-name">Uzbekistan</td>
+                        <td class="capital-name">Tashkent</td>
+                        <td class="population">27,865,738</td>
+                        <td class="area">447,400.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.72s">
+                        <td class="number">236</td>
+                        <td class="country-name">Vatican City</td>
+                        <td class="capital-name">Vatican City</td>
+                        <td class="population">921</td>
+                        <td class="area">0.4</td>
+                    </tr>
+                    <tr style="animation-delay: 4.74s">
+                        <td class="number">237</td>
+                        <td class="country-name">Saint Vincent and the Grenadines</td>
+                        <td class="capital-name">Kingstown</td>
+                        <td class="population">104,217</td>
+                        <td class="area">389.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.76s">
+                        <td class="number">238</td>
+                        <td class="country-name">Venezuela</td>
+                        <td class="capital-name">Caracas</td>
+                        <td class="population">27,223,228</td>
+                        <td class="area">912,050.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.78s">
+                        <td class="number">239</td>
+                        <td class="country-name">British Virgin Islands</td>
+                        <td class="capital-name">Road Town</td>
+                        <td class="population">21,730</td>
+                        <td class="area">153.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.8s">
+                        <td class="number">240</td>
+                        <td class="country-name">U.S. Virgin Islands</td>
+                        <td class="capital-name">Charlotte Amalie</td>
+                        <td class="population">108,708</td>
+                        <td class="area">352.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.82s">
+                        <td class="number">241</td>
+                        <td class="country-name">Vietnam</td>
+                        <td class="capital-name">Hanoi</td>
+                        <td class="population">89,571,130</td>
+                        <td class="area">329,560.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.84s">
+                        <td class="number">242</td>
+                        <td class="country-name">Vanuatu</td>
+                        <td class="capital-name">Port Vila</td>
+                        <td class="population">221,552</td>
+                        <td class="area">12,200.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.86s">
+                        <td class="number">243</td>
+                        <td class="country-name">Wallis and Futuna</td>
+                        <td class="capital-name">Mata-Utu</td>
+                        <td class="population">16,025</td>
+                        <td class="area">274.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.88s">
+                        <td class="number">244</td>
+                        <td class="country-name">Samoa</td>
+                        <td class="capital-name">Apia</td>
+                        <td class="population">192,001</td>
+                        <td class="area">2,944.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.9s">
+                        <td class="number">245</td>
+                        <td class="country-name">Kosovo</td>
+                        <td class="capital-name">Pristina</td>
+                        <td class="population">1,800,000</td>
+                        <td class="area">10,908.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.92s">
+                        <td class="number">246</td>
+                        <td class="country-name">Yemen</td>
+                        <td class="capital-name">Sanaa</td>
+                        <td class="population">23,495,361</td>
+                        <td class="area">527,970.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.94s">
+                        <td class="number">247</td>
+                        <td class="country-name">Mayotte</td>
+                        <td class="capital-name">Mamoudzou</td>
+                        <td class="population">159,042</td>
+                        <td class="area">374.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.96s">
+                        <td class="number">248</td>
+                        <td class="country-name">South Africa</td>
+                        <td class="capital-name">Pretoria</td>
+                        <td class="population">49,000,000</td>
+                        <td class="area">1,219,912.0</td>
+                    </tr>
+                    <tr style="animation-delay: 4.98s">
+                        <td class="number">249</td>
+                        <td class="country-name">Zambia</td>
+                        <td class="capital-name">Lusaka</td>
+                        <td class="population">13,460,305</td>
+                        <td class="area">752,614.0</td>
+                    </tr>
+                    <tr style="animation-delay: 5.0s">
+                        <td class="number">250</td>
+                        <td class="country-name">Zimbabwe</td>
+                        <td class="capital-name">Harare</td>
+                        <td class="population">11,651,858</td>
+                        <td class="area">390,580.0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <footer>
+            <a href="https://www.scrapethissite.com/pages/simple/" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="source-link">
+                <i class="fas fa-external-link-alt"></i>
+                Источник данных: ScrapeThisSite.com
+            </a>
+            <div class="timestamp">
+                <i class="far fa-clock"></i>
+                Данные обновлены: 03.12.2025 11:36:10 |
+                Сгенерировано программой на Python
+            </div>
+        </footer>
+    </div>
+    
+    <script>
+        // Анимация при прокрутке
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('tbody tr').forEach(row => {
+                observer.observe(row);
+            });
+        });
+    </script>
+</body>
+</html>
